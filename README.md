@@ -6,6 +6,16 @@ Build
 -----
 For usage and build instructions, see the official Raspberry Pi documenation pages [here.](https://www.raspberrypi.com/documentation/accessories/camera.html#libcamera-and-libcamera-apps)
 
+Cross Build RPI4
+----------------
+Example steps for cross compile libcamera-apps for raspberry pi 4
+````
+git submodule sync --init
+mkdir build && cd build
+cmake .. -DENABLE_DRM=0 -DENABLE_X11=0 -DENABLE_QT=0 -DENABLE_OPENCV=0 -DCMAKE_C_COMPILER=aarch64-rpi4-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-rpi4-linux-gnu-g++ -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/path/to/install
+make && make install
+````
+
 License
 -------
 
