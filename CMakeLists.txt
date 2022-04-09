@@ -45,7 +45,19 @@ include(CPack)
 
 find_package(PkgConfig REQUIRED)
 
-pkg_check_modules(LIBCAMERA REQUIRED libcamera)
+message(STATUS "PKG_CONFIG_USE_CMAKE_PREFIX_PATH: ${PKG_CONFIG_USE_CMAKE_PREFIX_PATH}")
+message(STATUS "CMAKE_INSTALL_LIBDIR: ${CMAKE_INSTALL_LIBDIR}")
+message(STATUS "CMAKE_INSTALL_INCLUDEDIR: ${CMAKE_INSTALL_INCLUDEDIR}")
+
+set(CMAKE_FIND_ROOT_PATH "${CMAKE_FIND_ROOT_PATH}:${CMAKE_SOURCE_DIR}/prebuilts/")
+link_directories("${CMAKE_SOURCE_DIR}/prebuilts/lib")
+include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/prebuilts/include")
+set(LIBRARY_HINT "${CMAKE_SOURCE_DIR}/prebuilts/lib/")
+
+#pkg_check_modules(LIBCAMERA REQUIRED libcamera)
+set(LIBCAMERA_VERSION "0.0.0")
+set(LIBCAMERA_LINK_LIBRARIES "${CMAKE_SOURCE_DIR}/prebuilts/lib/libcamera.so;${CMAKE_SOURCE_DIR}/prebuilts/lib/libcamera-base.so")
+set(LIBCAMERA_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/prebuilts/include/")
 message(STATUS "libcamera library found:")
 message(STATUS "    version: ${LIBCAMERA_VERSION}")
 message(STATUS "    libraries: ${LIBCAMERA_LINK_LIBRARIES}")

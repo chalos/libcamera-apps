@@ -52,4 +52,10 @@ add_library(post_processing_stages ${SRC})
 target_link_libraries(post_processing_stages ${TARGET_LIBS})
 target_compile_definitions(post_processing_stages PUBLIC OPENCV_PRESENT=${OpenCV_FOUND})
 
-install(TARGETS post_processing_stages LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+file(GLOB HEADERS ${CMAKE_CURRENT_LIST_DIR}/*.hpp ${CMAKE_CURRENT_LIST_DIR}/*.h)
+message(STATUS "HEADERS=${HEADERS}")
+set_target_properties(post_processing_stages PROPERTIES PRIVATE_HEADER "${HEADERS}")
+
+install(TARGETS post_processing_stages LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PRIVATE_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/post_processing_stages"
+)

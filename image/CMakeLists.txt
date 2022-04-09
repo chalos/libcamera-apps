@@ -2,12 +2,33 @@ cmake_minimum_required(VERSION 3.6)
 
 include(GNUInstallDirs)
 
-find_library(EXIF_LIBRARY exif REQUIRED)
-find_library(JPEG_LIBRARY jpeg REQUIRED)
-find_library(TIFF_LIBRARY tiff REQUIRED)
-find_library(PNG_LIBRARY png REQUIRED)
+find_library(EXIF_LIBRARY exif PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(JPEG_LIBRARY jpeg PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(TIFF_LIBRARY tiff PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(PNG_LIBRARY png PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(Z_LIBRARY z PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(JBIG_LIBRARY jbig PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(DEFLATE_LIBRARY deflate PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(WEBP_LIBRARY webp PATHS "${LIBRARY_HINT}" REQUIRED)
+find_library(BZ2_LIBRARY bz2 PATHS "${LIBRARY_HINT}" REQUIRED)
+
+message(STATUS "EXIF_LIBRARY=${EXIF_LIBRARY}")
+message(STATUS "JPEG_LIBRARY=${JPEG_LIBRARY}")
+message(STATUS "TIFF_LIBRARY=${TIFF_LIBRARY}")
+message(STATUS "PNG_LIBRARY=${PNG_LIBRARY}")
+message(STATUS "Z_LIBRARY=${Z_LIBRARY}")
+message(STATUS "JBIG_LIBRARY=${JBIG_LIBRARY}")
+message(STATUS "DEFLATE_LIBRARY=${DEFLATE_LIBRARY}")
+message(STATUS "WEBP_LIBRARY=${WEBP_LIBRARY}")
+message(STATUS "BZ2_LIBRARY=${BZ2_LIBRARY}")
 
 add_library(images bmp.cpp yuv.cpp jpeg.cpp png.cpp dng.cpp)
-target_link_libraries(images jpeg exif png tiff)
+target_link_libraries(images jpeg exif png tiff z jbig deflate webp zstd bz2)
 
-install(TARGETS images LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+file(GLOB HEADERS ${CMAKE_CURRENT_LIST_DIR}/*.hpp ${CMAKE_CURRENT_LIST_DIR}/*.h)
+message(STATUS "HEADERS=${HEADERS}")
+set_target_properties(images PROPERTIES PRIVATE_HEADER "${HEADERS}")
+
+install(TARGETS images LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PRIVATE_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/images"
+)
